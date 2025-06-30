@@ -52,6 +52,8 @@ public class SpaceshipTests
         Assert.Equal(100, fighter.Distance);
         cruiser.MoveForward();
         Assert.Equal(50, cruiser.Distance);
+        cruiser.MoveForward();
+        Assert.Equal(100, cruiser.Distance);
     }
     [Fact]
     public void FighterAndCruiser_CorrectShoot()
