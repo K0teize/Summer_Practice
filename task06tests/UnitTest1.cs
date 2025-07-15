@@ -4,15 +4,7 @@ using System.Reflection;
 using Xunit;
 using task06;
 
-[DisplayName("Пример класса")]
-[Version(1, 0)]
-public class SampleClass
-{
-    [DisplayName("Тестовый метод")]
-    public virtual void TestMethod(){}
-    [DisplayName("Числовое свойство")]
-    public int Number { get; }
-}
+
 public class AttributeReflectionTests
 {
     [Fact]

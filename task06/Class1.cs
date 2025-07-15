@@ -1,7 +1,17 @@
 ﻿using System.Reflection;
-using Microsoft.VisualBasic;
+
 
 namespace task06;
+
+[DisplayName("Пример класса")]
+[Version(1, 0)]
+public class SampleClass
+{
+    [DisplayName("Тестовый метод")]
+    public virtual void TestMethod() { }
+    [DisplayName("Числовое свойство")]
+    public int Number { get; set; }
+}
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method|AttributeTargets.Property)]
 public class DisplayNameAttribute : Attribute
