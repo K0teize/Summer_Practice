@@ -36,6 +36,6 @@ public class CalculatorGenTest
     public void DivByZero_ReturnDivideByZeroException()
     {
         ICalculator calculator = ClassGenerator.CalculatorGenerator();
-        Assert.Throws<DivideByZeroException>(() => calculator.Div(1,0));
+        Assert.Throws<DivideByZeroException>(() => calculator.Div(1, 0));
     }
 }
