@@ -6,31 +6,43 @@ public class DefiniteIntegral
     {
         double total = 0.0;
         double interval = (b - a) / threadsnumber;
-
+        Object lockObject = new Object();
+        var barrier = new Barrier(threadsnumber);
+        var threads = new Thread[threadsnumber];
         int totalSteps = (int)((b - a) / step);
         int stepsPerThread = totalSteps / threadsnumber;
 
-        Parallel.For(0, threadsnumber, () => 0.0, (i, state, localSum) =>
+        for (int i = 0; i < threadsnumber; i++)
         {
-            double start = a + i * interval;
-            double end = (i == threadsnumber - 1) ? b : start + interval;
-
-            double x = start;
-            double localStep = (end - start) / stepsPerThread;
-
-            for (int j = 0; j < stepsPerThread; j++)
+            int threadNum = i; 
+            threads[i] = new Thread(() => 
             {
-                localSum += (function(x) + function(x + localStep)) * 0.5 * localStep;
-                x += localStep;
-            }
+                double start = a + threadNum * interval;
+                double end = (threadNum == threadsnumber - 1) ? b : start + interval;
+                
+                double localSum = 0.0;
+                double x = start;
+                double localStep = (end - start) / stepsPerThread;
 
-            return localSum;
-        },
-        localSum =>
+                for (int j = 0; j < stepsPerThread; j++)
+                {
+                    localSum += (function(x) + function(x + localStep)) * 0.5 * localStep;
+                    x += localStep;
+                }
+                lock (lockObject)
+                {
+                    total += localSum;
+                }
+                
+                barrier.SignalAndWait();
+            });
+            
+            threads[i].Start();
+        }
+        foreach (var thread in threads)
         {
-            Interlocked.Exchange(ref total, total + localSum);
-        });
-
+            thread.Join();
+        }
         return total;
     }
 }
